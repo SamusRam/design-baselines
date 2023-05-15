@@ -745,3 +745,50 @@ def hopper_entropy_no_cons_denorm(local_dir, cpus, gpus, num_parallel, num_sampl
         resources_per_trial={'cpu': cpus // num_parallel,
                              'gpu': gpus / num_parallel - 0.01})
 
+
+
+@cli.command()
+@click.option('--local-dir', type=str, default='coms-cleaned-aav')
+@click.option('--cpus', type=int, default=24)
+@click.option('--gpus', type=int, default=1)
+@click.option('--num-parallel', type=int, default=1)
+@click.option('--num-samples', type=int, default=1)
+def aav(local_dir, cpus, gpus, num_parallel, num_samples):
+    """Evaluate Conservative Objective Models on AAV viral viability prediction
+    """
+    from design_baselines.coms_cleaned import coms_cleaned
+    ray.init(num_cpus=cpus,
+             num_gpus=gpus,
+             include_dashboard=False,
+             _temp_dir=os.path.expanduser('~/tmp'))
+    tune.run(coms_cleaned, config={
+        "logging_dir": "data",
+        "task": "AAV-FixedLength-v0",
+        "task_kwargs": {'seed': tune.randint(1000)},
+        "is_discrete": True,
+        "normalize_ys": True,
+        "normalize_xs": True,
+        "continuous_noise_std": 0.2,
+        "discrete_clip": 0.6,
+        "val_size": 500,
+        "batch_size": 128,
+        "epochs": 50,
+        "activations": ['leaky_relu', 'leaky_relu'],
+        "hidden": 2048,
+        "max_std": 0.2,
+        "min_std": 0.1,
+        "forward_model_lr": 0.0003,
+        "initial_alpha": 1.0,
+        "alpha_lr": 0.01,
+        "target_conservatism": -2.0,
+        "inner_lr": 0.05,
+        "outer_lr": 0.05,
+        "inner_gradient_steps": 1,
+        "outer_gradient_steps": 50,
+        "train_beta": 0.4,
+        "eval_beta": 0.4
+    },
+             num_samples=num_samples,
+             local_dir=local_dir,
+             resources_per_trial={'cpu': cpus // num_parallel,
+                                  'gpu': gpus / num_parallel - 0.01})
