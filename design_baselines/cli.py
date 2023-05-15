@@ -227,6 +227,7 @@ def rank_tables(table0, table1):
     tasks = [
         "gfp",
         "tf-bind-8",
+        "aav",
         "utr",
         "hopper",
         "superconductor",
@@ -651,6 +652,7 @@ def make_table_from_solutions(dir, distribution, percentile, load):
         "utr",
         "superconductor",
         "hopper",
+        "aav"
     ]
 
     baselines = [
@@ -671,6 +673,7 @@ def make_table_from_solutions(dir, distribution, percentile, load):
 
         task_to_task = {
             "gfp": db.make("GFP-Transformer-v0"),
+            "aav": db.make('AAV-FixedLength-v0'),
             "tf-bind-8": db.make("TFBind8-Exact-v0"),
             "utr": db.make("UTR-ResNet-v0"),
             "chembl": db.make("ChEMBL-ResNet-v0"),
@@ -886,6 +889,7 @@ def make_table(dir, percentile, modifier, group, normalize):
         "ant": db.make("AntMorphology-Exact-v0").y.max(),
         "dkitty": db.make("DKittyMorphology-Exact-v0").y.max(),
         "gfp": db.make("GFP-Transformer-v0").y.max(),
+        "aav": db.make("AAV-FixedLength-v0").y.max(),
         "utr": db.make("UTR-ResNet-v0", relabel=True).y.max(),
         "hopper": db.make("HopperController-Exact-v0").y.max(),
     }
