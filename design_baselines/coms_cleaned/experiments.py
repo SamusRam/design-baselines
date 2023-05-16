@@ -761,7 +761,7 @@ def aav(local_dir, cpus, gpus, num_parallel, num_samples):
              num_gpus=gpus,
              include_dashboard=False,
              _temp_dir=os.path.expanduser('~/tmp'))
-    tune.run(coms_cleaned, config = {
+    tune.run(coms_cleaned, config={
             "logging_dir": "data",
             "task": "AAV-FixedLength-v0",
             "task_relabel": False,

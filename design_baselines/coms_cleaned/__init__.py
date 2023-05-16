@@ -344,37 +344,37 @@ config):
             np.save(os.path.join(logging_dir, "solution.npy"), solution)
 
             # evaluate the solutions found by the model
-            score = task.predict(solution)
+            # score = task.predict(solution)
             prediction = forward_model(xt, training=False).numpy()
             final_prediction = forward_model(final_xt, training=False).numpy()
 
             if normalize_ys:
-                score = task.denormalize_y(score)
+                # score = task.denormalize_y(score)
                 prediction = task.denormalize_y(prediction)
                 final_prediction = task.denormalize_y(final_prediction)
 
             # record the prediction and score to the logger
             #print(f'score: {score}')
-            logger.record(f"score", score, step, percentile=True)
-            logger.record(f"solver/model_to_real",
-                          spearman(prediction[:, 0], score[:, 0]), step)
+            # logger.record(f"score", score, step, percentile=True)
+            # logger.record(f"solver/model_to_real",
+            #               spearman(prediction[:, 0], score[:, 0]), step)
             logger.record(f"solver/distance",
                           tf.linalg.norm(xt - initial_x), step)
             logger.record(f"solver/prediction",
                           prediction, step)
             logger.record(f"solver/model_overestimation",
                           final_prediction - prediction, step)
-            logger.record(f"solver/overestimation",
-                          prediction - score, step)
+            # logger.record(f"solver/overestimation",
+            #               prediction - score, step)
 
         if not fast:
 
-            scores.append(score)
+            # scores.append(score)
             predictions.append(prediction)
 
             # save the model predictions and scores to be aggregated later
-            np.save(os.path.join(logging_dir, "scores.npy"),
-                    np.concatenate(scores, axis=1))
+            # np.save(os.path.join(logging_dir, "scores.npy"),
+            #         np.concatenate(scores, axis=1))
             np.save(os.path.join(logging_dir, "predictions.npy"),
                     np.stack(predictions, axis=1))
 
