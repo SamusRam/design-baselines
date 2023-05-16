@@ -327,7 +327,6 @@ config):
         logger.record(f"dataset_score", initial_y, 0, percentile=True)
         # logger.record(f"score", score, 0, percentile=True)
     for step in range(1, 1 + particle_evaluate_gradient_steps):
-
         # update the set of solution particles
         xt = trainer.optimize(xt, 1, training=False)
         final_xt = trainer.optimize(
