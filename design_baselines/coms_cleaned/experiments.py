@@ -767,7 +767,7 @@ def aav(local_dir, cpus, gpus, num_parallel, num_samples):
         "task_kwargs": {'seed': tune.randint(0, 1000)},
         "is_discrete": True,
         "normalize_ys": True,
-        "normalize_xs": True,
+        "normalize_xs": False,
         "continuous_noise_std": 0.2,
         "discrete_clip": 0.6,
         "val_size": 500,
@@ -786,7 +786,7 @@ def aav(local_dir, cpus, gpus, num_parallel, num_samples):
         "inner_gradient_steps": 1,
         "outer_gradient_steps": 50,
         "train_beta": 0.4,
-        "eval_beta": 0.4
+        "eval_beta": 0.4, "do_evaluation": False
     },
              num_samples=num_samples,
              local_dir=local_dir,
