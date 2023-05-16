@@ -340,7 +340,7 @@ config):
                 solution = solution * standard_dev + mean
                 logits = vae_model.decoder_cnn.predict(solution)
                 solution = tf.argmax(logits, axis=2, output_type=tf.int32)
-            solution = task.map_to_integers(solution)
+            print('solution', solution)
             np.save(os.path.join(logging_dir, "solution.npy"), solution)
 
             # evaluate the solutions found by the model
