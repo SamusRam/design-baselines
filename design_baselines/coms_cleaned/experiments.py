@@ -795,7 +795,7 @@ def aav(local_dir, cpus, gpus, num_parallel, num_samples):
             "forward_model_batch_size": 128,
             "forward_model_val_size": 500,
             "forward_model_epochs": 50,
-            "evaluation_samples": 2090,
+            "evaluation_samples": 2121,
             "fast": False
         },
              num_samples=num_samples,
