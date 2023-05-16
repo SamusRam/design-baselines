@@ -303,7 +303,7 @@ config):
                    logger, forward_model_epochs)
 
     # select the top k initial designs from the dataset
-    indices = tf.math.top_k(y[:, 0], k=evaluation_samples)[1]
+    indices = tf.math.top_k(y[:, 0], k=len(y))[0]#evaluation_samples)[1]
     initial_x = tf.gather(x, indices, axis=0)
     initial_y = tf.gather(y, indices, axis=0)
     xt = initial_x
