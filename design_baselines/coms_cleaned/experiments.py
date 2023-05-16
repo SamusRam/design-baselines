@@ -764,7 +764,7 @@ def aav(local_dir, cpus, gpus, num_parallel, num_samples):
     tune.run(coms_cleaned, config={
         "logging_dir": "data",
         "task": "AAV-FixedLength-v0",
-        "task_kwargs": {'seed': tune.randint(1000)},
+        "task_kwargs": {'seed': tune.randint(0, 1000)},
         "is_discrete": True,
         "normalize_ys": True,
         "normalize_xs": True,
