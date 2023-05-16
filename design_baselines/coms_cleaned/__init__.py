@@ -318,14 +318,14 @@ config):
             logits = vae_model.decoder_cnn.predict(solution)
             solution = tf.argmax(logits, axis=2, output_type=tf.int32)
 
-        score = task.predict(solution)
+        # score = task.predict(solution)
 
         if normalize_ys:
             initial_y = task.denormalize_y(initial_y)
-            score = task.denormalize_y(score)
+            # score = task.denormalize_y(score)
 
         logger.record(f"dataset_score", initial_y, 0, percentile=True)
-        logger.record(f"score", score, 0, percentile=True)
+        # logger.record(f"score", score, 0, percentile=True)
     for step in range(1, 1 + particle_evaluate_gradient_steps):
 
         # update the set of solution particles
