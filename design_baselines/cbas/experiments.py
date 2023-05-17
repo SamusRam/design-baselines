@@ -532,7 +532,9 @@ def aav(local_dir, cpus, gpus, num_parallel, num_samples, difficulty):
              include_dashboard=False,
              _temp_dir=os.path.expanduser('~/tmp'))
     try:
-        difficulty_2_task = {'medium': "AAV-FixedLength-v0", "hard": "AAV-FixedLengthHard-v0"}
+        difficulty_2_task = {'medium': "AAV-FixedLength-v0",
+                             "hard": "AAV-FixedLengthHard-v0",
+                             "easy": "AAV-FixedLengthEasy-v0"}
         task_name = difficulty_2_task[difficulty]
     except KeyError:
         raise NotImplementedError(f'The currently supported difficulty levels are: {",".join(difficulty_2_task.keys())}')
