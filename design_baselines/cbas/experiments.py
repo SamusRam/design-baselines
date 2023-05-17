@@ -519,7 +519,8 @@ def nas(local_dir, cpus, gpus, num_parallel, num_samples):
 @click.option('--gpus', type=int, default=1)
 @click.option('--num-parallel', type=int, default=1)
 @click.option('--num-samples', type=int, default=1)
-def aav(local_dir, cpus, gpus, num_parallel, num_samples):
+@click.option('--difficulty', type=str, default='medium')
+def aav(local_dir, cpus, gpus, num_parallel, num_samples, difficulty):
     """Evaluate AutoFocusing on AAV viral viability prediction
     """
 
@@ -530,6 +531,11 @@ def aav(local_dir, cpus, gpus, num_parallel, num_samples):
              num_gpus=gpus,
              include_dashboard=False,
              _temp_dir=os.path.expanduser('~/tmp'))
+    try:
+        difficulty_2_task = {'medium': "AAV-FixedLength-v0", "hard": "AAV-FixedLengthHard-v0"}
+        task_name = difficulty_2_task[difficulty]
+    except KeyError:
+        raise NotImplementedError(f'The currently supported difficulty levels are: {",".join(difficulty_2_task.keys())}')
     tune.run(autofocused_cbas, config={
         "logging_dir": "data",
         "normalize_ys": True,
