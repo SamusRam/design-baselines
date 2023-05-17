@@ -640,7 +640,8 @@ def nas(local_dir, cpus, gpus, num_parallel, num_samples):
 @click.option('--num-parallel', type=int, default=1)
 @click.option('--num-samples', type=int, default=1)
 @click.option('--oracle', type=str, default="Transformer")
-def aav(local_dir, cpus, gpus, num_parallel, num_samples, oracle):
+@click.option('--difficulty', type=str, default="medium")
+def aav(local_dir, cpus, gpus, num_parallel, num_samples, oracle, difficulty):
     """Evaluate BO-QEI on AAV viral viability prediction
     """
 
@@ -651,11 +652,18 @@ def aav(local_dir, cpus, gpus, num_parallel, num_samples, oracle):
              num_gpus=gpus,
              include_dashboard=False,
              _temp_dir=os.path.expanduser('~/tmp'))
+    try:
+        difficulty_2_task = {'medium': "AAV-FixedLength-v0", "hard": "AAV-FixedLengthHard-v0"}
+        task_name = difficulty_2_task[difficulty]
+    except KeyError:
+        raise NotImplementedError(
+            f'The currently supported difficulty levels are: {",".join(difficulty_2_task.keys())}')
+
     tune.run(bo_qei, config={
         "logging_dir": "data",
         "normalize_ys": True,
         "normalize_xs": True,
-        "task": f"AAV-FixedLength-v0",
+        "task": task_name,
         "task_kwargs": {"relabel": False},
         "bootstraps": 5,
         "val_size": 200,

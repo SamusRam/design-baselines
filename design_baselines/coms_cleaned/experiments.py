@@ -754,12 +754,9 @@ def hopper_entropy_no_cons_denorm(local_dir, cpus, gpus, num_parallel, num_sampl
 @click.option('--num-parallel', type=int, default=1)
 @click.option('--difficulty', type=str, default='medium')
 def aav(local_dir, cpus, gpus, num_parallel, difficulty):
-    """Evaluate AutoFocusing on AAV viral viability prediction
+    """Evaluate CoMs on AAV viral viability prediction
     """
-
-    # Final Version
-
-    from design_baselines.autofocused_cbas import autofocused_cbas
+    from design_baselines.coms_cleaned import coms_cleaned
     ray.init(num_cpus=cpus,
              num_gpus=gpus,
              include_dashboard=False,
