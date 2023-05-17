@@ -752,18 +752,28 @@ def hopper_entropy_no_cons_denorm(local_dir, cpus, gpus, num_parallel, num_sampl
 @click.option('--cpus', type=int, default=24)
 @click.option('--gpus', type=int, default=1)
 @click.option('--num-parallel', type=int, default=1)
-@click.option('--num-samples', type=int, default=1)
-def aav(local_dir, cpus, gpus, num_parallel, num_samples):
-    """Evaluate Conservative Objective Models on AAV viral viability prediction
+@click.option('--difficulty', type=str, default='medium')
+def aav(local_dir, cpus, gpus, num_parallel, num_samples, difficulty):
+    """Evaluate AutoFocusing on AAV viral viability prediction
     """
-    from design_baselines.coms_cleaned import coms_cleaned
+
+    # Final Version
+
+    from design_baselines.autofocused_cbas import autofocused_cbas
     ray.init(num_cpus=cpus,
              num_gpus=gpus,
              include_dashboard=False,
              _temp_dir=os.path.expanduser('~/tmp'))
+    try:
+        difficulty_2_task = {'medium': "AAV-FixedLength-v0", "hard": "AAV-FixedLengthHard-v0"}
+        task_name = difficulty_2_task[difficulty]
+    except KeyError:
+        raise NotImplementedError(
+            f'The currently supported difficulty levels are: {",".join(difficulty_2_task.keys())}')
+
     tune.run(coms_cleaned, config={
             "logging_dir": "data",
-            "task": "AAV-FixedLength-v0",
+            "task": task_name,
             "task_relabel": False,
             "task_max_samples": None,
             "task_distribution": None,

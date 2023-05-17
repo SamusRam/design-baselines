@@ -540,7 +540,7 @@ def aav(local_dir, cpus, gpus, num_parallel, num_samples, difficulty):
         "logging_dir": "data",
         "normalize_ys": True,
         "normalize_xs": False,
-        "task": "AAV-FixedLength-v0",
+        "task": task_name,
         "task_kwargs": {"relabel": False},
         "bootstraps": 5,
         "val_size": 200,
