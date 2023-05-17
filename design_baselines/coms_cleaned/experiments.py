@@ -257,7 +257,8 @@ def molecule(local_dir, cpus, gpus, num_parallel, num_samples):
 @click.option('--gpus', type=int, default=1)
 @click.option('--num-parallel', type=int, default=1)
 @click.option('--num-samples', type=int, default=1)
-def gfp(local_dir, cpus, gpus, num_parallel, num_samples):
+@click.option('--difficulty', type=str, default='medium')
+def gfp(local_dir, cpus, gpus, num_parallel, num_samples, difficulty):
     """Evaluate Conservative Objective Models on GFP-v0
     """
 
@@ -266,9 +267,19 @@ def gfp(local_dir, cpus, gpus, num_parallel, num_samples):
              num_gpus=gpus,
              include_dashboard=False,
              _temp_dir=os.path.expanduser('~/tmp'))
+    try:
+        difficulty_2_task = {'medium': "GFP-TransformerMedium-v0",
+                             "hard": "GFP-TransformerHard-v0",
+                             "easy": "GFP-TransformerEasy-v0",
+                             "none": "GFP-v0"}
+        task_name = difficulty_2_task[difficulty]
+    except KeyError:
+        raise NotImplementedError(
+            f'The currently supported difficulty levels are: {",".join(difficulty_2_task.keys())}')
+
     tune.run(coms_cleaned, config={
         "logging_dir": "data",
-        "task": "GFP-v0",
+        "task": task_name,
         "task_kwargs": {'seed': tune.randint(1000)},
         "is_discrete": True,
         "normalize_ys": True,
