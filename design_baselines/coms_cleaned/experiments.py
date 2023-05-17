@@ -753,7 +753,7 @@ def hopper_entropy_no_cons_denorm(local_dir, cpus, gpus, num_parallel, num_sampl
 @click.option('--gpus', type=int, default=1)
 @click.option('--num-parallel', type=int, default=1)
 @click.option('--difficulty', type=str, default='medium')
-def aav(local_dir, cpus, gpus, num_parallel, num_samples, difficulty):
+def aav(local_dir, cpus, gpus, num_parallel, difficulty):
     """Evaluate AutoFocusing on AAV viral viability prediction
     """
 
