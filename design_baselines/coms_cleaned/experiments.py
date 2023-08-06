@@ -767,7 +767,6 @@ def hopper_entropy_no_cons_denorm(local_dir, cpus, gpus, num_parallel, num_sampl
                              'gpu': gpus / num_parallel - 0.01})
 
 
-
 @cli.command()
 @click.option('--local-dir', type=str, default='coms-cleaned-aav')
 @click.option('--cpus', type=int, default=24)
@@ -787,6 +786,73 @@ def aav(local_dir, cpus, gpus, num_parallel, num_samples, difficulty):
         difficulty_2_task = {'medium': "AAV-FixedLength-v0",
                              "hard": "AAV-FixedLengthHard-v0",
                              "easy": "AAV-FixedLengthEasy-v0"}
+        task_name = difficulty_2_task[difficulty]
+    except KeyError:
+        raise NotImplementedError(
+            f'The currently supported difficulty levels are: {",".join(difficulty_2_task.keys())}')
+
+    tune.run(coms_cleaned, config={
+            "logging_dir": "data",
+            "task": task_name,
+            "task_relabel": False,
+            "task_max_samples": None,
+            "task_distribution": None,
+            "normalize_ys": True,
+            "normalize_xs": False,
+            "in_latent_space": False,
+            "vae_hidden_size": 64,
+            "vae_latent_size": 256,
+            "vae_activation": "relu",
+            "vae_kernel_size": 3,
+            "vae_num_blocks": 4,
+            "vae_lr": 0.0003,
+            "vae_beta": 1.0,
+            "vae_batch_size": 128,
+            "vae_val_size": 200,
+            "vae_epochs": 10,
+            "particle_lr": 2.0,
+            "particle_train_gradient_steps": 50,
+            "particle_evaluate_gradient_steps": 50,
+            "particle_entropy_coefficient": 0.0,
+            "forward_model_activations": ["relu", "relu"],
+            "forward_model_hidden_size": 2048,
+            "forward_model_final_tanh": False,
+            "forward_model_lr": 0.0003,
+            "forward_model_alpha": 0.1,
+            "forward_model_alpha_lr": 0.01,
+            "forward_model_overestimation_limit": 2,
+            "forward_model_noise_std": 0.0,
+            "forward_model_batch_size": 128,
+            "forward_model_val_size": 500,
+            "forward_model_epochs": 50,
+            "evaluation_samples": 2121,
+            "fast": False
+        },
+             num_samples=num_samples,
+             local_dir=local_dir,
+             resources_per_trial={'cpu': cpus // num_parallel,
+                                  'gpu': gpus / num_parallel - 0.01})
+
+
+@cli.command()
+@click.option('--local-dir', type=str, default='coms-cleaned-gb1')
+@click.option('--cpus', type=int, default=24)
+@click.option('--gpus', type=int, default=1)
+@click.option('--num-parallel', type=int, default=1)
+@click.option('--num-samples', type=int, default=1)
+@click.option('--difficulty', type=str, default='medium')
+def gb1(local_dir, cpus, gpus, num_parallel, num_samples, difficulty):
+    """Evaluate CoMs on GB1
+    """
+    from design_baselines.coms_cleaned import coms_cleaned
+    ray.init(num_cpus=cpus,
+             num_gpus=gpus,
+             include_dashboard=False,
+             _temp_dir=os.path.expanduser('~/tmp'))
+    try:
+        difficulty_2_task = {'medium': "GB1-FixedLength-v0",
+                             "hard": "GB1-FixedLengthHard-v0",
+                             "easy": "GB1-FixedLengthEasy-v0"}
         task_name = difficulty_2_task[difficulty]
     except KeyError:
         raise NotImplementedError(
